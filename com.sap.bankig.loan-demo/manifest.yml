@@ -1,0 +1,10 @@
+applications:
+- name: ocb-loan-demo
+  path: target\loan-origination-0.0.1-SNAPSHOT.jar
+  memory: 768M
+  health-check-type: http
+  health-check-http-endpoint: /loan
+  buildpack: java_buildpack
+  
+  
+  
