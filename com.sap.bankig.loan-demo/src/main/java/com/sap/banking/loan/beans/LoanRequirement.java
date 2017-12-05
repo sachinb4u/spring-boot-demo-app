@@ -3,9 +3,9 @@ package com.sap.banking.loan.beans;
 public class LoanRequirement {
 
 	protected long loanAmount;
-	protected int tenure;
+	protected int tenureInYears;
 
-	protected long getLoanAmount() {
+	public long getLoanAmount() {
 		return loanAmount;
 	}
 
@@ -13,12 +13,12 @@ public class LoanRequirement {
 		this.loanAmount = loanAmount;
 	}
 
-	public int getTenure() {
-		return tenure;
+	public int getTenureInYears() {
+		return tenureInYears;
 	}
 
-	public void setTenure(int tenure) {
-		this.tenure = tenure;
+	public void setTenureInYears(int tenureInYears) {
+		this.tenureInYears = tenureInYears;
 	}
 
 }

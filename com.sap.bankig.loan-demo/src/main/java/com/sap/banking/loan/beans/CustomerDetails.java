@@ -11,67 +11,67 @@ public class CustomerDetails {
 	private String phone;
 	private String email;
 
-	protected String getFirstName() {
+	public String getFirstName() {
 		return firstName;
 	}
 
-	protected void setFirstName(String firstName) {
+	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
 
-	protected String getMiddleName() {
+	public String getMiddleName() {
 		return middleName;
 	}
 
-	protected void setMiddleName(String middleName) {
+	public void setMiddleName(String middleName) {
 		this.middleName = middleName;
 	}
 
-	protected String getLastName() {
+	public String getLastName() {
 		return lastName;
 	}
 
-	protected void setLastName(String lastName) {
+	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
 
-	protected Genders getGender() {
+	public Genders getGender() {
 		return gender;
 	}
 
-	protected void setGender(Genders gender) {
+	public void setGender(Genders gender) {
 		this.gender = gender;
 	}
 
-	protected Address getAddress() {
+	public Address getAddress() {
 		return address;
 	}
 
-	protected void setAddress(Address address) {
+	public void setAddress(Address address) {
 		this.address = address;
 	}
 
-	protected Professions getProfession() {
+	public Professions getProfession() {
 		return profession;
 	}
 
-	protected void setProfession(Professions profession) {
+	public void setProfession(Professions profession) {
 		this.profession = profession;
 	}
 
-	protected String getPhone() {
+	public String getPhone() {
 		return phone;
 	}
 
-	protected void setPhone(String phone) {
+	public void setPhone(String phone) {
 		this.phone = phone;
 	}
 
-	protected String getEmail() {
+	public String getEmail() {
 		return email;
 	}
 
-	protected void setEmail(String email) {
+	public void setEmail(String email) {
 		this.email = email;
 	}
 

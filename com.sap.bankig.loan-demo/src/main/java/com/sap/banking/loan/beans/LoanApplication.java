@@ -10,43 +10,43 @@ public class LoanApplication {
 	private CustomerDetails customerDetails;
 	private Collection<LoanOffer> offers;
 
-	protected String getApplicationId() {
+	public String getApplicationId() {
 		return applicationId;
 	}
 
-	protected void setApplicationId(String applicationId) {
+	public void setApplicationId(String applicationId) {
 		this.applicationId = applicationId;
 	}
 
-	protected LoanTypes getLoanType() {
+	public LoanTypes getLoanType() {
 		return loanType;
 	}
 
-	protected void setLoanType(LoanTypes loanType) {
+	public void setLoanType(LoanTypes loanType) {
 		this.loanType = loanType;
 	}
 
-	protected LoanRequirement getLoanRequirement() {
+	public LoanRequirement getLoanRequirement() {
 		return loanRequirement;
 	}
 
-	protected void setLoanRequirement(LoanRequirement loanRequirement) {
+	public void setLoanRequirement(LoanRequirement loanRequirement) {
 		this.loanRequirement = loanRequirement;
 	}
 
-	protected CustomerDetails getCustomerDetails() {
+	public CustomerDetails getCustomerDetails() {
 		return customerDetails;
 	}
 
-	protected void setCustomerDetails(CustomerDetails customerDetails) {
+	public void setCustomerDetails(CustomerDetails customerDetails) {
 		this.customerDetails = customerDetails;
 	}
 
-	protected Collection<LoanOffer> getOffers() {
+	public Collection<LoanOffer> getOffers() {
 		return offers;
 	}
 
-	protected void setOffers(Collection<LoanOffer> offers) {
+	public void setOffers(Collection<LoanOffer> offers) {
 		this.offers = offers;
 	}
 
