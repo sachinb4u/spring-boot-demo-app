@@ -27,6 +27,7 @@ import com.sap.banking.loan.beans.Genders;
 import com.sap.banking.loan.beans.LoanApplication;
 import com.sap.banking.loan.beans.LoanRequirement;
 import com.sap.banking.loan.beans.LoanTypes;
+import com.sap.banking.loan.beans.Professions;
 import com.sap.banking.loan.exceptions.LoanApplicationNotFoundException;
 
 @RestController
@@ -54,11 +55,11 @@ public class LoanApplicationController {
 
 		loanAppsMap.put(application.getApplicationId(), application);
 	}
-	
+
 	@GetMapping
 	@ResponseBody
-	public Collection<LoanApplication> listApplications(){
-		
+	public Collection<LoanApplication> listApplications() {
+
 		return loanAppsMap.values();
 	}
 
@@ -90,4 +91,14 @@ public class LoanApplicationController {
 		loanAppsMap.remove(applicationId);
 	}
 
+	@GetMapping("/loantypes")
+	public ResponseEntity<LoanTypes[]> getLoanTypes() {
+		return new ResponseEntity<LoanTypes[]>(LoanTypes.values(), OK);
+	}
+
+	@GetMapping("/professions")
+	@ResponseBody
+	public ResponseEntity<Professions[]> getProfessions() {
+		return new ResponseEntity<Professions[]>(Professions.values(), OK);
+	}
 }
