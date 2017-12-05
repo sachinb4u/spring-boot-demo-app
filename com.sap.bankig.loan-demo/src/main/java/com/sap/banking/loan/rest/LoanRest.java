@@ -30,7 +30,7 @@ import com.sap.banking.loan.beans.LoanTypes;
 import com.sap.banking.loan.exceptions.LoanApplicationNotFoundException;
 
 @RestController
-@RequestMapping("/loan")
+@RequestMapping("/loanapplications")
 public class LoanRest {
 
 	private Map<String, LoanApplication> loanAppsMap = new ConcurrentHashMap<>();
