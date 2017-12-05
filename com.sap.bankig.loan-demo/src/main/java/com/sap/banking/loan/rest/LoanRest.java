@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -72,7 +74,7 @@ public class LoanRest {
 
 	@PostMapping
 	@ResponseStatus(CREATED)
-	public void addBooking(@RequestBody LoanApplication application) {
+	public void addLoanApplication(@RequestBody @Valid LoanApplication application) {
 		String appId = UUID.randomUUID().toString();
 		application.setApplicationId(appId);
 		loanAppsMap.put(appId, application);
@@ -80,7 +82,7 @@ public class LoanRest {
 
 	@DeleteMapping("/{applicationId}")
 	@ResponseStatus(NO_CONTENT)
-	public void deleteBooking(@PathVariable String applicationId) {
+	public void deleteLoanApplication(@PathVariable String applicationId) {
 		if (!loanAppsMap.containsKey(applicationId)) {
 			throw new LoanApplicationNotFoundException(applicationId);
 		}
