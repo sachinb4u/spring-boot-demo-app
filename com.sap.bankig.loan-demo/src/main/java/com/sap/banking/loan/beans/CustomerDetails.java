@@ -1,14 +1,44 @@
 package com.sap.banking.loan.beans;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.validation.groups.Default;
+
+import org.hibernate.validator.constraints.Email;
+
+import com.sap.banking.loan.validations.constraints.PhoneNumber;
+import com.sap.banking.loan.validations.groups.AddLoanApplication;
+
 public class CustomerDetails {
 
+	@NotNull(groups = { Default.class, AddLoanApplication.class })
+	@Size(min = 5, max = 30, groups = { Default.class, AddLoanApplication.class })
 	private String firstName;
+
+	@Size(min = 1, max = 30, groups = { Default.class, AddLoanApplication.class })
 	private String middleName;
+
+	@NotNull(groups = { Default.class, AddLoanApplication.class })
+	@Size(min = 5, max = 30, groups = { Default.class, AddLoanApplication.class })
 	private String lastName;
+
+	@NotNull(groups = { Default.class, AddLoanApplication.class })
 	private Genders gender;
+
+	@NotNull
+	@Valid
 	private Address address;
+
+	@NotNull(groups = { Default.class, AddLoanApplication.class })
 	private Professions profession;
+
+	@NotNull(groups = { Default.class, AddLoanApplication.class })
+	@PhoneNumber(size = 8, groups = { Default.class, AddLoanApplication.class })
 	private String phone;
+
+	@NotNull(groups = { Default.class, AddLoanApplication.class })
+	@Email(groups = { Default.class, AddLoanApplication.class })
 	private String email;
 
 	public String getFirstName() {
