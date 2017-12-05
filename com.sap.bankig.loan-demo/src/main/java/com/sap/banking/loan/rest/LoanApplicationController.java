@@ -10,8 +10,11 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.validation.Valid;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +32,7 @@ import com.sap.banking.loan.beans.LoanRequirement;
 import com.sap.banking.loan.beans.LoanTypes;
 import com.sap.banking.loan.beans.Professions;
 import com.sap.banking.loan.exceptions.LoanApplicationNotFoundException;
+import com.sap.banking.loan.validations.groups.AddLoanApplication;
 
 @RestController
 @RequestMapping("/loanapplications")
@@ -75,7 +79,7 @@ public class LoanApplicationController {
 
 	@PostMapping
 	@ResponseStatus(CREATED)
-	public void addLoanApplication(@RequestBody @Valid LoanApplication application) {
+	public void addLoanApplication(@RequestBody @Validated(AddLoanApplication.class) LoanApplication application) {
 		String appId = UUID.randomUUID().toString();
 		application.setApplicationId(appId);
 		loanAppsMap.put(appId, application);

@@ -12,20 +12,20 @@ import com.sap.banking.loan.validations.groups.UpdateLoanApplication;
 
 public class LoanApplication {
 
-	@NotNull(groups = {DeleteLoanApplication.class, UpdateLoanApplication.class})
+	@NotNull(groups = { Default.class, DeleteLoanApplication.class, UpdateLoanApplication.class })
 	private String applicationId;
-	
-	@NotNull(message = "Loan type is required", groups = {Default.class, AddLoanApplication.class})
+
+	@NotNull(message = "Loan type is required", groups = { Default.class, AddLoanApplication.class })
 	private LoanTypes loanType;
-	
-	@NotNull
+
 	@Valid
+	@NotNull(groups = { Default.class, AddLoanApplication.class })
 	private LoanRequirement loanRequirement;
-	
-	@NotNull
+
 	@Valid
+	@NotNull(groups = { Default.class, AddLoanApplication.class })
 	private CustomerDetails customerDetails;
-	
+
 	private Collection<LoanOffer> offers;
 
 	public String getApplicationId() {
