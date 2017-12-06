@@ -86,6 +86,7 @@ public class LoanApplicationController {
 		// Create LoanApplication and return the location URL to retrieve application with id.
 		UriComponents uriComponents = uriBuilder.path("/loanapplications/{applicationId}").buildAndExpand(appId);
 		
+		// response should contain location URL to retrieve created resource
 		return ResponseEntity.created(uriComponents.toUri()).build();
 	}
 
