@@ -13,7 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
  *
  */
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class LoanApplicationNotFoundException extends RuntimeException {
+public class LoanApplicationNotFoundException extends BusinessException {
 
 	private static final long serialVersionUID = 6421372506198842581L;
 
