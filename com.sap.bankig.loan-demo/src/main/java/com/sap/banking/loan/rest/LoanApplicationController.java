@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.sap.banking.loan.beans.CustomerDetails;
 import com.sap.banking.loan.beans.Genders;
@@ -74,11 +76,17 @@ public class LoanApplicationController {
 	}
 
 	@PostMapping
-	@ResponseStatus(CREATED)
-	public void addLoanApplication(@RequestBody @Validated(AddLoanApplication.class) LoanApplication application) {
+	public ResponseEntity<?> addLoanApplication(@RequestBody @Validated(AddLoanApplication.class) LoanApplication application,
+			UriComponentsBuilder uriBuilder) {
+
 		String appId = UUID.randomUUID().toString();
 		application.setApplicationId(appId);
 		loanAppsMap.put(appId, application);
+
+		// Create LoanApplication and return the location URL to retrieve application with id.
+		UriComponents uriComponents = uriBuilder.path("/loanapplications/{applicationId}").buildAndExpand(appId);
+		
+		return ResponseEntity.created(uriComponents.toUri()).build();
 	}
 
 	@DeleteMapping("/{applicationId}")
