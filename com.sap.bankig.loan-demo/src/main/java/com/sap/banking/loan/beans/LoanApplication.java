@@ -15,7 +15,7 @@ public class LoanApplication {
 	@NotNull(groups = { Default.class, DeleteLoanApplication.class, UpdateLoanApplication.class })
 	private String applicationId;
 
-	@NotNull(message = "Loan type is required", groups = { Default.class, AddLoanApplication.class })
+	@NotNull(groups = { Default.class, AddLoanApplication.class })
 	private LoanTypes loanType;
 
 	@Valid
