@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.sap.banking.loan.exceptions.BusinessException;
 import com.sap.banking.loan.exceptions.UnauthorizedAccessException;
 
 /**
@@ -20,7 +20,7 @@ import com.sap.banking.loan.exceptions.UnauthorizedAccessException;
  *
  */
 @RestControllerAdvice(annotations = { RestController.class })
-public class RestExceptionHandler extends ResponseEntityExceptionHandler {
+public class RestExceptionHandler  {
 
 	/**
 	 * Handle exceptions thrown from all RequestMappings
@@ -30,7 +30,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 	 * @return
 	 */
 	@ExceptionHandler({ UnauthorizedAccessException.class })
-	public ResponseEntity<Object> handleRestServiceExceptions(Exception ex, WebRequest request) {
+	public ResponseEntity<Object> handleRestServiceExceptions(BusinessException ex, WebRequest request) {
 
 		if (ex instanceof UnauthorizedAccessException) {
 			return new ResponseEntity<Object>(null, UNAUTHORIZED);
