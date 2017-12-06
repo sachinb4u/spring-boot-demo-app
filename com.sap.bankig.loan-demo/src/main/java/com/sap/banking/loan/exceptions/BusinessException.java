@@ -1,7 +1,8 @@
 package com.sap.banking.loan.exceptions;
 
-@SuppressWarnings("serial")
 public class BusinessException extends RuntimeException {
+
+	private static final long serialVersionUID = -5337923226741175071L;
 
 	public BusinessException() {
 		super();
