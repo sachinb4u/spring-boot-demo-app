@@ -1,6 +1,5 @@
 package com.sap.banking.loan.rest;
 
-import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.HttpStatus.OK;
 
@@ -9,6 +8,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -67,15 +69,30 @@ public class LoanApplicationController {
 
 	@GetMapping("/{applicationId}")
 	@ResponseBody
-	public ResponseEntity<LoanApplication> getLoanApplication(@PathVariable String applicationId) {
+	public ResponseEntity<LoanApplication> getLoanApplication(@PathVariable String applicationId, WebRequest request) {
 
 		if (!loanAppsMap.containsKey(applicationId)) {
 			throw new LoanApplicationNotFoundException(applicationId);
 		}
-		return new ResponseEntity<LoanApplication>(loanAppsMap.get(applicationId), OK);
+		LoanApplication loanApp = loanAppsMap.get(applicationId);
+
+		// if not found
+		if (loanApp == null) {
+			throw new LoanApplicationNotFoundException(applicationId);
+		}
+
+		// consider hashCode as ETag value
+		String etagValue = String.valueOf(loanApp.hashCode());
+
+		// Check ETag with If-None-Match header sent by client and send NOT_MODIFIED(304) status code without content
+		if (request.checkNotModified(etagValue)) {
+			return new ResponseEntity<LoanApplication>(HttpStatus.NOT_MODIFIED);
+		}
+
+		return ResponseEntity.ok().eTag(etagValue).body(loanApp);
 	}
 
-	@PostMapping
+	@PostMapping(consumes = { MediaType.APPLICATION_JSON_UTF8_VALUE })
 	public ResponseEntity<?> addLoanApplication(@RequestBody @Validated(AddLoanApplication.class) LoanApplication application,
 			UriComponentsBuilder uriBuilder) {
 
@@ -85,7 +102,7 @@ public class LoanApplicationController {
 
 		// Create LoanApplication and return the location URL to retrieve application with id.
 		UriComponents uriComponents = uriBuilder.path("/loanapplications/{applicationId}").buildAndExpand(appId);
-		
+
 		// response should contain location URL to retrieve created resource
 		return ResponseEntity.created(uriComponents.toUri()).build();
 	}
