@@ -33,4 +33,29 @@ public class LoanRequirement {
 		this.tenureInYears = tenureInYears;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (int) (loanAmount ^ (loanAmount >>> 32));
+		result = prime * result + tenureInYears;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		LoanRequirement other = (LoanRequirement) obj;
+		if (loanAmount != other.loanAmount)
+			return false;
+		if (tenureInYears != other.tenureInYears)
+			return false;
+		return true;
+	}
+
 }
