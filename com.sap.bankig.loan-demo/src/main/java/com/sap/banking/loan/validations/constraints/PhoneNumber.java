@@ -21,7 +21,7 @@ import javax.validation.constraints.Size;
 public @interface PhoneNumber {
 
 	@OverridesAttribute.List({ @OverridesAttribute(constraint = Size.class, name = "message") })
-	String message() default "Phone number should be of {min} digits";
+	String message() default "{com.sap.banking.loan.validations.constraints.PhoneNumber.message}";
 
 	Class<?>[] groups() default {};
 

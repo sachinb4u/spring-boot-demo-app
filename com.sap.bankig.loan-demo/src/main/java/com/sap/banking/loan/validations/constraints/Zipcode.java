@@ -21,7 +21,7 @@ import javax.validation.constraints.Size;
 public @interface Zipcode {
 
 	@OverridesAttribute.List({ @OverridesAttribute(constraint = Size.class, name = "message") })
-	String message() default "Zipcode should be of {min} digits";
+	String message() default "{com.sap.banking.loan.validations.constraints.Zipcode.message}";
 
 	Class<?>[] groups() default {};
 
