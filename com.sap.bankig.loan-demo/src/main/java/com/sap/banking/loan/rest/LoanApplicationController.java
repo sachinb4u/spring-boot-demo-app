@@ -1,15 +1,16 @@
 package com.sap.banking.loan.rest;
 
+import static java.util.concurrent.TimeUnit.DAYS;
+import static org.springframework.http.HttpStatus.NOT_MODIFIED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -67,6 +68,13 @@ public class LoanApplicationController {
 		return loanAppsMap.values();
 	}
 
+	/**
+	 * Get resource uses ETag to save network bandwidth by returning Not_Modified(304) if resource is not changed
+	 * 
+	 * @param applicationId
+	 * @param request
+	 * @return
+	 */
 	@GetMapping("/{applicationId}")
 	@ResponseBody
 	public ResponseEntity<LoanApplication> getLoanApplication(@PathVariable String applicationId, WebRequest request) {
@@ -86,13 +94,20 @@ public class LoanApplicationController {
 
 		// Check ETag with If-None-Match header sent by client and send NOT_MODIFIED(304) status code without content
 		if (request.checkNotModified(etagValue)) {
-			return new ResponseEntity<LoanApplication>(HttpStatus.NOT_MODIFIED);
+			return new ResponseEntity<LoanApplication>(NOT_MODIFIED);
 		}
 
 		return ResponseEntity.ok().eTag(etagValue).body(loanApp);
 	}
 
-	@PostMapping(consumes = { MediaType.APPLICATION_JSON_UTF8_VALUE })
+	/**
+	 * Post returns URL of newly created resource in Location header and entity in body.
+	 * 
+	 * @param application
+	 * @param uriBuilder
+	 * @return
+	 */
+	@PostMapping(consumes = { APPLICATION_JSON_UTF8_VALUE })
 	public ResponseEntity<?> addLoanApplication(@RequestBody @Validated(AddLoanApplication.class) LoanApplication application,
 			UriComponentsBuilder uriBuilder) {
 
@@ -104,9 +119,14 @@ public class LoanApplicationController {
 		UriComponents uriComponents = uriBuilder.path("/loanapplications/{applicationId}").buildAndExpand(appId);
 
 		// response should contain location URL to retrieve created resource
-		return ResponseEntity.created(uriComponents.toUri()).build();
+		return ResponseEntity.created(uriComponents.toUri()).body(application);
 	}
 
+	/**
+	 * Delete returns No_Content(204) on successful delete and 404 if resource not found
+	 * 
+	 * @param applicationId
+	 */
 	@DeleteMapping("/{applicationId}")
 	@ResponseStatus(NO_CONTENT)
 	public void deleteLoanApplication(@PathVariable String applicationId) {
@@ -117,14 +137,24 @@ public class LoanApplicationController {
 		loanAppsMap.remove(applicationId);
 	}
 
+	/**
+	 * Enable client side caching with CacheControl headers for static data
+	 * 
+	 * @return
+	 */
 	@GetMapping("/loantypes")
 	public ResponseEntity<LoanTypes[]> getLoanTypes() {
-		return new ResponseEntity<LoanTypes[]>(LoanTypes.values(), OK);
+		return ResponseEntity.ok().cacheControl(CacheControl.maxAge(1, DAYS)).body(LoanTypes.values());
 	}
 
+	/**
+	 * Enable client side caching with CacheControl headers for static data
+	 * 
+	 * @return
+	 */
 	@GetMapping("/professions")
 	@ResponseBody
 	public ResponseEntity<Professions[]> getProfessions() {
-		return new ResponseEntity<Professions[]>(Professions.values(), OK);
+		return ResponseEntity.ok().cacheControl(CacheControl.maxAge(1, DAYS)).body(Professions.values());
 	}
 }
