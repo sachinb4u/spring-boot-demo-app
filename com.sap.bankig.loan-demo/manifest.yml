@@ -3,7 +3,7 @@ applications:
   path: target\loan-origination-0.0.1-SNAPSHOT.jar
   memory: 768M
   health-check-type: http
-  health-check-http-endpoint: /loan
+  health-check-http-endpoint: /loanapplications
   buildpack: java_buildpack
   
   
