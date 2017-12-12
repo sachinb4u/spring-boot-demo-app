@@ -6,10 +6,8 @@ import static org.springframework.http.HttpStatus.NO_CONTENT;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 import java.util.Collection;
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -26,46 +24,25 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.sap.banking.loan.beans.CustomerDetails;
-import com.sap.banking.loan.beans.Genders;
 import com.sap.banking.loan.beans.LoanApplication;
-import com.sap.banking.loan.beans.LoanRequirement;
 import com.sap.banking.loan.beans.LoanTypes;
 import com.sap.banking.loan.beans.Professions;
 import com.sap.banking.loan.exceptions.LoanApplicationNotFoundException;
+import com.sap.banking.loan.service.LoanApplicationService;
 import com.sap.banking.loan.validations.groups.AddLoanApplication;
 
 @RestController
 @RequestMapping("/loanapplications")
 public class LoanApplicationController {
 
-	private Map<String, LoanApplication> loanAppsMap = new ConcurrentHashMap<>();
-
-	{
-		LoanApplication application = new LoanApplication();
-		application.setApplicationId("123");
-		application.setLoanType(LoanTypes.PersonalLoan);
-
-		LoanRequirement loanRequirement = new LoanRequirement();
-		loanRequirement.setLoanAmount(10000);
-		loanRequirement.setTenureInYears(5);
-
-		application.setLoanRequirement(loanRequirement);
-		CustomerDetails customerDetails = new CustomerDetails();
-		customerDetails.setFirstName("Sachin");
-		customerDetails.setLastName("Bhosale");
-		customerDetails.setEmail("sachinb4u@gmail.com");
-		customerDetails.setGender(Genders.Male);
-		application.setCustomerDetails(customerDetails);
-
-		loanAppsMap.put(application.getApplicationId(), application);
-	}
+	@Autowired
+	private LoanApplicationService loanApplicationService;
 
 	@GetMapping
 	@ResponseBody
 	public Collection<LoanApplication> listApplications() {
 
-		return loanAppsMap.values();
+		return loanApplicationService.getAllLoanApplications();
 	}
 
 	/**
@@ -79,10 +56,7 @@ public class LoanApplicationController {
 	@ResponseBody
 	public ResponseEntity<LoanApplication> getLoanApplication(@PathVariable String applicationId, WebRequest request) {
 
-		if (!loanAppsMap.containsKey(applicationId)) {
-			throw new LoanApplicationNotFoundException(applicationId);
-		}
-		LoanApplication loanApp = loanAppsMap.get(applicationId);
+		LoanApplication loanApp = loanApplicationService.getLoanApplicationByapplicationId(applicationId);
 
 		// if not found
 		if (loanApp == null) {
@@ -110,13 +84,11 @@ public class LoanApplicationController {
 	@PostMapping(consumes = { APPLICATION_JSON_UTF8_VALUE })
 	public ResponseEntity<?> addLoanApplication(@RequestBody @Validated(AddLoanApplication.class) LoanApplication application,
 			UriComponentsBuilder uriBuilder) {
-
-		String appId = UUID.randomUUID().toString();
-		application.setApplicationId(appId);
-		loanAppsMap.put(appId, application);
+		
+		LoanApplication saveLoanApp =  loanApplicationService.saveLoanApplication(application);
 
 		// Create LoanApplication and return the location URL to retrieve application with id.
-		UriComponents uriComponents = uriBuilder.path("/loanapplications/{applicationId}").buildAndExpand(appId);
+		UriComponents uriComponents = uriBuilder.path("/loanapplications/{applicationId}").buildAndExpand(saveLoanApp.getApplicationId());
 
 		// response should contain location URL to retrieve created resource
 		return ResponseEntity.created(uriComponents.toUri()).body(application);
@@ -130,11 +102,8 @@ public class LoanApplicationController {
 	@DeleteMapping("/{applicationId}")
 	@ResponseStatus(NO_CONTENT)
 	public void deleteLoanApplication(@PathVariable String applicationId) {
-		if (!loanAppsMap.containsKey(applicationId)) {
-			throw new LoanApplicationNotFoundException(applicationId);
-		}
 
-		loanAppsMap.remove(applicationId);
+		loanApplicationService.deleteLoanApplication(applicationId);
 	}
 
 	/**
@@ -157,4 +126,13 @@ public class LoanApplicationController {
 	public ResponseEntity<Professions[]> getProfessions() {
 		return ResponseEntity.ok().cacheControl(CacheControl.maxAge(1, DAYS)).body(Professions.values());
 	}
+
+	public LoanApplicationService getLoanApplicationService() {
+		return loanApplicationService;
+	}
+
+	public void setLoanApplicationService(LoanApplicationService loanApplicationService) {
+		this.loanApplicationService = loanApplicationService;
+	}
+
 }
