@@ -1,5 +1,6 @@
 package com.sap.banking.loan.beans;
 
+import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
 
@@ -7,6 +8,7 @@ import org.hibernate.validator.constraints.Range;
 
 import com.sap.banking.loan.validations.groups.AddLoanApplication;
 
+@Embeddable
 public class LoanRequirement {
 
 	@NotNull(groups = { Default.class, AddLoanApplication.class })

@@ -2,6 +2,10 @@ package com.sap.banking.loan.beans;
 
 import java.util.Collection;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Transient;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
@@ -10,9 +14,12 @@ import com.sap.banking.loan.validations.groups.AddLoanApplication;
 import com.sap.banking.loan.validations.groups.DeleteLoanApplication;
 import com.sap.banking.loan.validations.groups.UpdateLoanApplication;
 
+@Entity
 public class LoanApplication {
 
-	@NotNull(groups = { Default.class, DeleteLoanApplication.class, UpdateLoanApplication.class })
+	@Id
+	@GeneratedValue
+	@NotNull(groups = {DeleteLoanApplication.class, UpdateLoanApplication.class })
 	private String applicationId;
 
 	@NotNull(groups = { Default.class, AddLoanApplication.class })
@@ -26,6 +33,7 @@ public class LoanApplication {
 	@NotNull(groups = { Default.class, AddLoanApplication.class })
 	private CustomerDetails customerDetails;
 
+	@Transient
 	private Collection<LoanOffer> offers;
 
 	public String getApplicationId() {
