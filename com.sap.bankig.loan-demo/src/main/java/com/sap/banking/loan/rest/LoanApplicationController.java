@@ -27,7 +27,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.sap.banking.loan.beans.LoanApplication;
 import com.sap.banking.loan.beans.LoanTypes;
 import com.sap.banking.loan.beans.Professions;
-import com.sap.banking.loan.exceptions.LoanApplicationNotFoundException;
 import com.sap.banking.loan.service.LoanApplicationService;
 import com.sap.banking.loan.validations.groups.AddLoanApplication;
 
@@ -38,12 +37,19 @@ public class LoanApplicationController {
 	@Autowired
 	private LoanApplicationService loanApplicationService;
 
+
+	/**
+	 * Get All loan applications
+	 * 
+	 * @return
+	 */
 	@GetMapping
 	@ResponseBody
 	public Collection<LoanApplication> listApplications() {
 
 		return loanApplicationService.getAllLoanApplications();
 	}
+
 
 	/**
 	 * Get resource uses ETag to save network bandwidth by returning Not_Modified(304) if resource is not changed
@@ -58,11 +64,6 @@ public class LoanApplicationController {
 
 		LoanApplication loanApp = loanApplicationService.getLoanApplicationByapplicationId(applicationId);
 
-		// if not found
-		if (loanApp == null) {
-			throw new LoanApplicationNotFoundException(applicationId);
-		}
-
 		// consider hashCode as ETag value
 		String etagValue = String.valueOf(loanApp.hashCode());
 
@@ -74,6 +75,7 @@ public class LoanApplicationController {
 		return ResponseEntity.ok().eTag(etagValue).body(loanApp);
 	}
 
+
 	/**
 	 * Post returns URL of newly created resource in Location header and entity in body.
 	 * 
@@ -84,8 +86,8 @@ public class LoanApplicationController {
 	@PostMapping(consumes = { APPLICATION_JSON_UTF8_VALUE })
 	public ResponseEntity<?> addLoanApplication(@RequestBody @Validated(AddLoanApplication.class) LoanApplication application,
 			UriComponentsBuilder uriBuilder) {
-		
-		LoanApplication saveLoanApp =  loanApplicationService.saveLoanApplication(application);
+
+		LoanApplication saveLoanApp = loanApplicationService.saveLoanApplication(application);
 
 		// Create LoanApplication and return the location URL to retrieve application with id.
 		UriComponents uriComponents = uriBuilder.path("/loanapplications/{applicationId}").buildAndExpand(saveLoanApp.getApplicationId());
@@ -93,6 +95,7 @@ public class LoanApplicationController {
 		// response should contain location URL to retrieve created resource
 		return ResponseEntity.created(uriComponents.toUri()).body(application);
 	}
+
 
 	/**
 	 * Delete returns No_Content(204) on successful delete and 404 if resource not found
@@ -106,6 +109,7 @@ public class LoanApplicationController {
 		loanApplicationService.deleteLoanApplication(applicationId);
 	}
 
+
 	/**
 	 * Enable client side caching with CacheControl headers for static data
 	 * 
@@ -115,6 +119,7 @@ public class LoanApplicationController {
 	public ResponseEntity<LoanTypes[]> getLoanTypes() {
 		return ResponseEntity.ok().cacheControl(CacheControl.maxAge(1, DAYS)).body(LoanTypes.values());
 	}
+
 
 	/**
 	 * Enable client side caching with CacheControl headers for static data
@@ -127,9 +132,11 @@ public class LoanApplicationController {
 		return ResponseEntity.ok().cacheControl(CacheControl.maxAge(1, DAYS)).body(Professions.values());
 	}
 
+
 	public LoanApplicationService getLoanApplicationService() {
 		return loanApplicationService;
 	}
+
 
 	public void setLoanApplicationService(LoanApplicationService loanApplicationService) {
 		this.loanApplicationService = loanApplicationService;

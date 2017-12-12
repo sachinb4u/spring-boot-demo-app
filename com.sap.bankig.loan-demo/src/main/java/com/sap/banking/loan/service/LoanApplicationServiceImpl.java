@@ -16,15 +16,22 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
 	@Autowired
 	private LoanApplicationRepository repository;
 
+
 	@Override
 	public LoanApplication saveLoanApplication(LoanApplication application) {
 		return repository.save(application);
 	}
 
+
 	@Override
 	public LoanApplication getLoanApplicationByapplicationId(String applicationId) {
-		return repository.findOne(applicationId);
+		LoanApplication application = repository.findOne(applicationId);
+		if (application == null) {
+			throw new LoanApplicationNotFoundException(applicationId);
+		}
+		return application;
 	}
+
 
 	@Override
 	public void deleteLoanApplication(String applicationId) {
@@ -34,6 +41,7 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
 			throw new LoanApplicationNotFoundException(applicationId, dataAccessException);
 		}
 	}
+
 
 	@Override
 	public List<LoanApplication> getAllLoanApplications() {
