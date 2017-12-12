@@ -1,11 +1,8 @@
 package com.sap.banking.loan.beans;
 
-import java.util.Collection;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Transient;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
@@ -32,9 +29,6 @@ public class LoanApplication {
 	@Valid
 	@NotNull(groups = { Default.class, AddLoanApplication.class })
 	private CustomerDetails customerDetails;
-
-	@Transient
-	private Collection<LoanOffer> offers;
 
 	public String getApplicationId() {
 		return applicationId;
@@ -68,14 +62,6 @@ public class LoanApplication {
 		this.customerDetails = customerDetails;
 	}
 
-	public Collection<LoanOffer> getOffers() {
-		return offers;
-	}
-
-	public void setOffers(Collection<LoanOffer> offers) {
-		this.offers = offers;
-	}
-
 	
 	@Override
 	public int hashCode() {
@@ -85,7 +71,6 @@ public class LoanApplication {
 		result = prime * result + ((customerDetails == null) ? 0 : customerDetails.hashCode());
 		result = prime * result + ((loanRequirement == null) ? 0 : loanRequirement.hashCode());
 		result = prime * result + ((loanType == null) ? 0 : loanType.hashCode());
-		result = prime * result + ((offers == null) ? 0 : offers.hashCode());
 		return result;
 	}
 
@@ -114,11 +99,6 @@ public class LoanApplication {
 		} else if (!loanRequirement.equals(other.loanRequirement))
 			return false;
 		if (loanType != other.loanType)
-			return false;
-		if (offers == null) {
-			if (other.offers != null)
-				return false;
-		} else if (!offers.equals(other.offers))
 			return false;
 		return true;
 	}
