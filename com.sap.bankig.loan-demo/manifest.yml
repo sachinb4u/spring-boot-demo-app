@@ -6,7 +6,7 @@ applications:
   health-check-http-endpoint: /loanapplications
   buildpack: java_buildpack
 services:
-- mypgsql
+- ocbdb
   
   
   
