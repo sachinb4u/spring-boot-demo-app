@@ -62,7 +62,7 @@ public class LoanApplicationController {
 	 */
 	@GetMapping("/{applicationId}")
 	@ResponseBody
-	public ResponseEntity<LoanApplication> getLoanApplication(@PathVariable @NotNull String applicationId, WebRequest request) {
+	public ResponseEntity<LoanApplication> getLoanApplication(@PathVariable @NotNull Long applicationId, WebRequest request) {
 
 		LoanApplication loanApp = loanApplicationService.getLoanApplicationByapplicationId(applicationId);
 
@@ -106,7 +106,7 @@ public class LoanApplicationController {
 	 */
 	@DeleteMapping("/{applicationId}")
 	@ResponseStatus(NO_CONTENT)
-	public void deleteLoanApplication(@PathVariable @NotNull String applicationId) {
+	public void deleteLoanApplication(@PathVariable @NotNull Long applicationId) {
 
 		loanApplicationService.deleteLoanApplication(applicationId);
 	}

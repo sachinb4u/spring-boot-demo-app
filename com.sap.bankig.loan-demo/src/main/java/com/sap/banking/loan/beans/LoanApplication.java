@@ -17,7 +17,7 @@ public class LoanApplication {
 	@Id
 	@GeneratedValue
 	@NotNull(groups = {DeleteLoanApplication.class, UpdateLoanApplication.class })
-	private String applicationId;
+	private Long applicationId;
 
 	@NotNull(groups = { Default.class, AddLoanApplication.class })
 	private LoanTypes loanType;
@@ -30,11 +30,11 @@ public class LoanApplication {
 	@NotNull(groups = { Default.class, AddLoanApplication.class })
 	private CustomerDetails customerDetails;
 
-	public String getApplicationId() {
+	public Long getApplicationId() {
 		return applicationId;
 	}
 
-	public void setApplicationId(String applicationId) {
+	public void setApplicationId(Long applicationId) {
 		this.applicationId = applicationId;
 	}
 

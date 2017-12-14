@@ -24,21 +24,21 @@ public class LoanApplicationServiceImpl implements LoanApplicationService {
 
 
 	@Override
-	public LoanApplication getLoanApplicationByapplicationId(String applicationId) {
+	public LoanApplication getLoanApplicationByapplicationId(Long applicationId) {
 		LoanApplication application = repository.findOne(applicationId);
 		if (application == null) {
-			throw new LoanApplicationNotFoundException(applicationId);
+			throw new LoanApplicationNotFoundException(String.valueOf(applicationId));
 		}
 		return application;
 	}
 
 
 	@Override
-	public void deleteLoanApplication(String applicationId) {
+	public void deleteLoanApplication(Long applicationId) {
 		try {
 			repository.delete(applicationId);
 		} catch (EmptyResultDataAccessException dataAccessException) {
-			throw new LoanApplicationNotFoundException(applicationId, dataAccessException);
+			throw new LoanApplicationNotFoundException(String.valueOf(applicationId), dataAccessException);
 		}
 	}
 

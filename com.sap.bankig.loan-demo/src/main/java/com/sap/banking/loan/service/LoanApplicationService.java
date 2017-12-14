@@ -8,9 +8,9 @@ public interface LoanApplicationService {
 
 	LoanApplication saveLoanApplication(LoanApplication application);
 
-	LoanApplication getLoanApplicationByapplicationId(String applicationId);
+	LoanApplication getLoanApplicationByapplicationId(Long applicationId);
 
-	void deleteLoanApplication(String applicationId);
+	void deleteLoanApplication(Long applicationId);
 
 	List<LoanApplication> getAllLoanApplications();
 
