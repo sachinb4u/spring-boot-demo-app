@@ -5,6 +5,8 @@ applications:
   health-check-type: http
   health-check-http-endpoint: /loanapplications
   buildpack: java_buildpack
+  env:
+    JAVA_OPTS: -Dspring.profiles.active=cloud
 services:
 - ocbdb
   
